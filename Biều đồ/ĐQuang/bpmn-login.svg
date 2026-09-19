@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 540" width="1280" height="540" style="background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Arrow Marker -->
+    <marker id="arrow-login" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" />
+    </marker>
+    <marker id="arrow-login-error" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+    </marker>
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow-login" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="32" font-size="18" font-weight="bold" fill="#0f172a">BPMN 2.0 — QUY TRÌNH ĐĂNG NHẬP HỆ THỐNG (USER LOGIN PROCESS)</text>
+  <text x="40" y="52" font-size="12" fill="#64748b">Dự án: Hệ thống Website Bán hàng Trực tuyến ElectroTech | Xác thực JWT &amp; Phân quyền Role (Customer / Admin)</text>
+
+  <!-- POOL CONTAINER -->
+  <rect x="40" y="70" width="1200" height="440" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+  
+  <!-- Pool Header (Left vertical banner) -->
+  <rect x="40" y="70" width="42" height="440" fill="#f1f5f9" stroke="#334155" stroke-width="1.5" />
+  <text x="-290" y="96" font-size="13" font-weight="bold" fill="#1e293b" transform="rotate(-90)" text-anchor="middle" letter-spacing="1">HỆ THỐNG BÁN HÀNG ELECTROTECH</text>
+
+  <!-- SWIMLANE 1: NGƯỜI DÙNG (USER: CUSTOMER / ADMIN) -->
+  <rect x="82" y="70" width="1158" height="210" fill="#ffffff" stroke="#94a3b8" stroke-width="1" />
+  <rect x="82" y="70" width="34" height="210" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" />
+  <text x="-175" y="103" font-size="12" font-weight="600" fill="#334155" transform="rotate(-90)" text-anchor="middle">Người dùng (User)</text>
+
+  <!-- SWIMLANE 2: HỆ THỐNG (API & DATABASE) -->
+  <rect x="82" y="280" width="1158" height="230" fill="#fafbfc" stroke="#94a3b8" stroke-width="1" />
+  <rect x="82" y="280" width="34" height="230" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" />
+  <text x="-395" y="103" font-size="12" font-weight="600" fill="#334155" transform="rotate(-90)" text-anchor="middle">Hệ thống (Web &amp; Server)</text>
+
+  <!-- ==================== FLOW ELEMENTS ==================== -->
+
+  <!-- 1. START EVENT -->
+  <circle cx="150" cy="175" r="18" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" filter="url(#shadow-login)" />
+  <text x="150" y="212" font-size="11" font-weight="600" fill="#166534" text-anchor="middle">Bắt đầu</text>
+
+  <!-- Sequence: Start -> Task 1 -->
+  <line x1="168" y1="175" x2="200" y2="175" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 2. TASK 1: USER NHẬP EMAIL & MẬT KHẨU (User Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="200" y="145" width="140" height="60" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+    <path d="M 212 157 a 4 4 0 1 0 8 0 a 4 4 0 1 0 -8 0 M 209 169 c 0 -3 3 -4 7 -4 c 4 0 7 1 7 4 z" fill="#3b82f6" />
+    <text x="270" y="170" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Nhập thông tin</text>
+    <text x="270" y="186" font-size="10" fill="#475569" text-anchor="middle">Email &amp; Mật khẩu</text>
+  </g>
+
+  <!-- Sequence: Task 1 -> Task 2 -->
+  <line x1="340" y1="175" x2="375" y2="175" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 3. TASK 2: BẤM ĐĂNG NHẬP (User Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="375" y="148" width="120" height="54" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+    <path d="M 387 160 a 4 4 0 1 0 8 0 a 4 4 0 1 0 -8 0 M 384 172 c 0 -3 3 -4 7 -4 c 4 0 7 1 7 4 z" fill="#3b82f6" />
+    <text x="440" y="171" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Nhấn nút</text>
+    <text x="440" y="187" font-size="11" font-weight="bold" fill="#2563eb" text-anchor="middle">"Đăng nhập"</text>
+  </g>
+
+  <!-- Sequence: Task 2 -> Task 3 (Crossing lane from User to System) -->
+  <path d="M 435 202 L 435 345" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 4. TASK 3: XÁC THỰC CREDENTIALS (System Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="360" y="345" width="150" height="66" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <path d="M 375 358 l 2 -1 l 1 2 l 2 0 l 1 -2 l 2 1 l 0 2 l 2 1 l -1 2 l 1 2 l -2 1 l 0 2 l -2 1 l -1 -2 l -2 0 l -1 2 l -2 -1 l 0 -2 l -2 -1 l 1 -2 l -1 -2 l 2 -1 z" fill="#64748b" />
+    <text x="435" y="372" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Kiểm tra thông tin</text>
+    <text x="435" y="388" font-size="10" fill="#475569" text-anchor="middle">User &amp; BCrypt Verify</text>
+    <text x="435" y="401" font-size="9" fill="#64748b" text-anchor="middle">trong SQL Server</text>
+  </g>
+
+  <!-- Sequence: Task 3 -> Gateway 1 -->
+  <line x1="510" y1="378" x2="545" y2="378" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 5. GATEWAY 1: THÔNG TIN HỢP LỆ? (System Lane) -->
+  <g filter="url(#shadow-login)">
+    <polygon points="570,356 592,378 570,400 548,378" fill="#fffbeb" stroke="#d97706" stroke-width="1.8" />
+    <text x="570" y="383" font-size="14" font-weight="bold" fill="#b45309" text-anchor="middle">×</text>
+    <text x="570" y="418" font-size="10" font-weight="600" fill="#92400e" text-anchor="middle">Hợp lệ?</text>
+  </g>
+
+  <!-- Gateway 1 -> [Sai thông tin] Loop back to User form -->
+  <path d="M 570 356 L 570 240 L 270 240 L 270 205" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-login-error)" />
+  <rect x="525" y="275" width="84" height="20" rx="3" fill="#fee2e2" stroke="#fca5a5" stroke-width="1" />
+  <text x="567" y="289" font-size="9.5" font-weight="bold" fill="#b91c1c" text-anchor="middle">Sai / Bị khóa</text>
+  <text x="355" y="234" font-size="9.5" fill="#dc2626" font-weight="600">Báo lỗi: "Email hoặc mật khẩu không đúng"</text>
+
+  <!-- Gateway 1 -> [Đúng thông tin] -> Task 4 -->
+  <line x1="592" y1="378" x2="630" y2="378" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+  <rect x="595" y="362" width="32" height="15" rx="3" fill="#dcfce7" />
+  <text x="611" y="373" font-size="9.5" font-weight="bold" fill="#15803d" text-anchor="middle">Đúng</text>
+
+  <!-- 6. TASK 4: TẠO JWT TOKEN (System Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="630" y="348" width="145" height="60" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <path d="M 645 361 l 2 -1 l 1 2 l 2 0 l 1 -2 l 2 1 l 0 2 l 2 1 l -1 2 l 1 2 l -2 1 l 0 2 l -2 1 l -1 -2 l -2 0 l -1 2 l -2 -1 l 0 -2 l -2 -1 l 1 -2 l -1 -2 l 2 -1 z" fill="#64748b" />
+    <text x="702" y="372" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Tạo cặp Token</text>
+    <text x="702" y="388" font-size="10" fill="#475569" text-anchor="middle">(Access &amp; Refresh Token)</text>
+  </g>
+
+  <!-- Sequence: Task 4 -> Task 5 -->
+  <line x1="775" y1="378" x2="805" y2="378" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 7. TASK 5: LƯU REFRESH TOKEN VÀO DB (System Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="805" y="348" width="140" height="60" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <path d="M 820 361 l 2 -1 l 1 2 l 2 0 l 1 -2 l 2 1 l 0 2 l 2 1 l -1 2 l 1 2 l -2 1 l 0 2 l -2 1 l -1 -2 l -2 0 l -1 2 l -2 -1 l 0 -2 l -2 -1 l 1 -2 l -1 -2 l 2 -1 z" fill="#64748b" />
+    <text x="875" y="372" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Lưu Refresh Token</text>
+    <text x="875" y="388" font-size="10" fill="#475569" text-anchor="middle">vào CSDL</text>
+  </g>
+
+  <!-- Sequence: Task 5 -> Task 6 (Crossing lane from System to User/Client) -->
+  <path d="M 875 348 L 875 205" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 8. TASK 6: LƯU TOKEN VÀO CLIENT (User Lane) -->
+  <g filter="url(#shadow-login)">
+    <rect x="805" y="145" width="140" height="60" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+    <text x="875" y="170" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Lưu Token vào</text>
+    <text x="875" y="186" font-size="10" fill="#2563eb" font-weight="bold" text-anchor="middle">localStorage Client</text>
+  </g>
+
+  <!-- Sequence: Task 6 -> Gateway 2 -->
+  <line x1="945" y1="175" x2="975" y2="175" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+
+  <!-- 9. GATEWAY 2: PHÂN QUYỀN THEO ROLE (User Lane) -->
+  <g filter="url(#shadow-login)">
+    <polygon points="997,153 1019,175 997,197 975,175" fill="#fffbeb" stroke="#d97706" stroke-width="1.8" />
+    <text x="997" y="180" font-size="14" font-weight="bold" fill="#b45309" text-anchor="middle">×</text>
+    <text x="997" y="215" font-size="10" font-weight="600" fill="#92400e" text-anchor="middle">Role?</text>
+  </g>
+
+  <!-- Branch 1: Customer -> Task 7a -->
+  <path d="M 997 153 L 997 115 L 1045 115" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+  <rect x="980" y="95" width="56" height="15" rx="3" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
+  <text x="1008" y="106" font-size="9" font-weight="bold" fill="#1d4ed8" text-anchor="middle">Customer</text>
+
+  <!-- TASK 7a: ĐIỀU HƯỚNG TRANG CHỦ -->
+  <g filter="url(#shadow-login)">
+    <rect x="1045" y="90" width="125" height="50" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" />
+    <text x="1107" y="112" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Điều hướng đến</text>
+    <text x="1107" y="128" font-size="11" font-weight="bold" fill="#16a34a" text-anchor="middle">Trang chủ (/)</text>
+  </g>
+
+  <!-- Sequence: Task 7a -> End 1 -->
+  <line x1="1170" y1="115" x2="1205" y2="115" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+  <circle cx="1225" cy="115" r="16" fill="#fee2e2" stroke="#dc2626" stroke-width="3" filter="url(#shadow-login)" />
+  <circle cx="1225" cy="115" r="11" fill="none" stroke="#dc2626" stroke-width="1" />
+
+  <!-- Branch 2: Admin -> Task 7b -->
+  <path d="M 997 197 L 997 235 L 1045 235" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+  <rect x="990" y="240" width="46" height="15" rx="3" fill="#fdf2f8" stroke="#fbcfe8" stroke-width="1" />
+  <text x="1013" y="251" font-size="9" font-weight="bold" fill="#9d174d" text-anchor="middle">Admin</text>
+
+  <!-- TASK 7b: ĐIỀU HƯỚNG ADMIN DASHBOARD -->
+  <g filter="url(#shadow-login)">
+    <rect x="1045" y="210" width="125" height="50" rx="8" fill="#ffffff" stroke="#9333ea" stroke-width="1.5" />
+    <text x="1107" y="232" font-size="11" font-weight="600" fill="#1e293b" text-anchor="middle">Điều hướng đến</text>
+    <text x="1107" y="248" font-size="11" font-weight="bold" fill="#9333ea" text-anchor="middle">Admin Dashboard</text>
+  </g>
+
+  <!-- Sequence: Task 7b -> End 2 -->
+  <line x1="1170" y1="235" x2="1205" y2="235" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-login)" />
+  <circle cx="1225" cy="235" r="16" fill="#fee2e2" stroke="#dc2626" stroke-width="3" filter="url(#shadow-login)" />
+  <circle cx="1225" cy="235" r="11" fill="none" stroke="#dc2626" stroke-width="1" />
+
+  <!-- LEGEND -->
+  <g transform="translate(60, 485)">
+    <text x="0" y="15" font-size="11" font-weight="bold" fill="#475569">Chú thích chuẩn BPMN 2.0:</text>
+    <circle cx="160" cy="11" r="7" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+    <text x="175" y="15" font-size="10" fill="#334155">Start Event</text>
+
+    <circle cx="260" cy="11" r="7" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5" />
+    <text x="275" y="15" font-size="10" fill="#334155">End Event</text>
+
+    <rect x="350" y="4" width="22" height="14" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+    <text x="380" y="15" font-size="10" fill="#334155">User Task</text>
+
+    <rect x="450" y="4" width="22" height="14" rx="3" fill="#ffffff" stroke="#475569" stroke-width="1.5" />
+    <text x="480" y="15" font-size="10" fill="#334155">Service Task</text>
+
+    <polygon points="570,4 578,11 570,18 562,11" fill="#fffbeb" stroke="#d97706" stroke-width="1.5" />
+    <text x="586" y="15" font-size="10" fill="#334155">Exclusive Gateway (XOR)</text>
+  </g>
+</svg>
