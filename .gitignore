@@ -1,0 +1,24 @@
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+.env.*
+!.env.example
+secrets.json
+appsettings.Local.json
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Isolated implementation worktrees
+.worktrees/
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
