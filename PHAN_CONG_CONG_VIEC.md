@@ -40,7 +40,7 @@ Thời gian cụ thể sẽ được cập nhật theo lịch môn học và th�
 
 - Đã thống nhất phân công 5 thành viên.
 - Đã lập kế hoạch ban đầu và đưa tài liệu Team leader lên nhánh `toanLead`.
-- Nhánh `toanLead` chưa triển khai mã nguồn Frontend, Backend, AI hoặc CI/CD.
+- Ngày 26/10/2026: tiếp nhận mã nguồn QLDA (Frontend, Backend, CI) từ nhánh `feature/TL-01-baseline`, commit nguồn `32589220e70f348efeedc33c39d0786a430db285`. Đây là mã nguồn kế thừa, chưa nghiệm thu chức năng cho môn học mới. Xem `docs/TL-01_BASELINE.md`.
 - Kết quả phân tích và biểu đồ buổi 1 được giữ trong báo cáo riêng; không coi đó là các chức năng phần mềm đã hoàn thành.
 
 ## 6. Cập nhật tiến độ trên Git
