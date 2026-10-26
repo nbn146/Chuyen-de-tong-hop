@@ -18,18 +18,6 @@ public class AdminController : ControllerBase
         _adminService = adminService;
     }
 
-    // US-1: Get all users (paginated)
-    [HttpGet("users")]
-    public async Task<IActionResult> GetUsers(
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string? keyword = null,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await _adminService.GetUsersAsync(pageNumber, pageSize, keyword, cancellationToken);
-        return Ok(result);
-    }
-
     [HttpGet("orders")]
     public async Task<IActionResult> GetOrders(
         [FromQuery] int pageNumber = 1,
