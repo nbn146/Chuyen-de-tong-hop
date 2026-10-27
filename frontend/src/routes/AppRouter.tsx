@@ -6,7 +6,7 @@ import HomePage from '../pages/HomePage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ProfilePage from '../pages/ProfilePage';
-
+import CartPage from '../pages/CartPage';
 import { ToastProvider } from '../contexts/ToastContext';
 
 export default function AppRouter() {
@@ -17,6 +17,7 @@ export default function AppRouter() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/cart" element={<CartPage />} />
           </Route>
 
           
