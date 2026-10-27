@@ -7,6 +7,8 @@ import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ProfilePage from '../pages/ProfilePage';
 import CartPage from '../pages/CartPage';
+import ProductListPage from '../pages/ProductListPage';
+import ProductDetailPage from '../pages/ProductDetailPage';
 import { ToastProvider } from '../contexts/ToastContext';
 
 export default function AppRouter() {
@@ -18,6 +20,8 @@ export default function AppRouter() {
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/products" element={<ProductListPage />} />
+            <Route path="/products/:id" element={<ProductDetailPage />} />
           </Route>
 
           
