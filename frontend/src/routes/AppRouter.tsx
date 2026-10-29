@@ -9,6 +9,11 @@ import ProfilePage from '../pages/ProfilePage';
 import CartPage from '../pages/CartPage';
 import ProductListPage from '../pages/ProductListPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
+
+
+import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
+
+import UserManagementPage from '../pages/admin/UserManagementPage';
 import { ToastProvider } from '../contexts/ToastContext';
 
 export default function AppRouter() {
@@ -24,6 +29,10 @@ export default function AppRouter() {
             <Route path="/products/:id" element={<ProductDetailPage />} />
           </Route>
 
+          <Route path="/admin">
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="users" element={<UserManagementPage />} />
+          </Route>
           
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
