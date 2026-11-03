@@ -12,7 +12,7 @@ import ProductDetailPage from '../pages/ProductDetailPage';
 
 
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
-
+import CategoryManagementPage from '../pages/admin/CategoryManagementPage';
 import UserManagementPage from '../pages/admin/UserManagementPage';
 import { ToastProvider } from '../contexts/ToastContext';
 
@@ -32,6 +32,7 @@ export default function AppRouter() {
           <Route path="/admin">
             <Route index element={<AdminDashboardPage />} />
             <Route path="users" element={<UserManagementPage />} />
+            <Route path="categories" element={<CategoryManagementPage />} />
           </Route>
           
           <Route path="/login" element={<LoginPage />} />
