@@ -21,7 +21,7 @@ public sealed class AiChatService(
     ILogger<AiChatService> logger) : IChatService
 {
     private readonly AiChatOptions _chatOptions = chatOptions.Value;
-    private readonly string _geminiModel = configuration["Gemini:Model"] ?? "gemini-3.8-flash";
+    private readonly string _geminiModel = configuration["Gemini:Model"] ?? "gemini-3.5-flash";
 
     public async Task<ChatResponseDto> ChatAsync(
         ChatRequestDto request,
@@ -125,6 +125,7 @@ public sealed class AiChatService(
             dbContext.AiMessageSources.Add(new AiMessageSource
             {
                 Message = assistantMessage,
+                SourceType = AiSourceTypes.Vector,
                 ChunkID = product.ChunkID,
                 ProductID = product.ProductID,
                 Rank = index + 1,

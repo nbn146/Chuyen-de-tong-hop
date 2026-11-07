@@ -114,7 +114,7 @@ public sealed class QdrantAiVectorStore(
 
 public sealed class AiQdrantOptions
 {
-    public string Endpoint { get; set; } = "http://localhost:6334";
+    public string Endpoint { get; set; } = "http://localhost:6434";
     public string Collection { get; set; } = "ecommerce_products_v1";
     public string? ApiKey { get; set; }
 }

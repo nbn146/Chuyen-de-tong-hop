@@ -11,7 +11,7 @@ public sealed class GeminiAnswerGenerator(
     IOptions<AiChatOptions> options) : IGeminiAnswerGenerator
 {
     private readonly string? _apiKey = configuration["Gemini:ApiKey"];
-    private readonly string _model = configuration["Gemini:Model"] ?? "gemini-3.8-flash";
+    private readonly string _model = configuration["Gemini:Model"] ?? "gemini-3.5-flash";
     private readonly AiChatOptions _options = options.Value;
 
     public async Task<string?> GenerateAsync(

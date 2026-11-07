@@ -9,10 +9,21 @@ public sealed class AiMessageSourceConfiguration : IEntityTypeConfiguration<AiMe
 {
     public void Configure(EntityTypeBuilder<AiMessageSource> builder)
     {
-        builder.ToTable("AIMessageSources");
+        builder.ToTable("AIMessageSources", table =>
+        {
+            table.HasCheckConstraint(
+                "CK_AIMessageSources_SourceType",
+                "[SourceType] IN ('vector', 'lexical', 'catalog')");
+            // Vector sources must point to the chunk and hash they were answered from; other sources have none.
+            table.HasCheckConstraint(
+                "CK_AIMessageSources_Chunk",
+                "([SourceType] = 'vector' AND [ChunkID] IS NOT NULL AND [SourceVersion] IS NOT NULL) OR " +
+                "([SourceType] <> 'vector' AND [ChunkID] IS NULL AND [SourceVersion] IS NULL)");
+        });
         builder.HasKey(source => source.SourceID);
         builder.Property(source => source.SourceID).UseIdentityColumn();
-        builder.Property(source => source.SourceVersion).IsRequired().HasMaxLength(64).IsUnicode(false);
+        builder.Property(source => source.SourceType).IsRequired().HasMaxLength(20).IsUnicode(false);
+        builder.Property(source => source.SourceVersion).HasMaxLength(64).IsUnicode(false);
         builder.Property(source => source.CreatedAt).IsRequired().HasDefaultValueSql("SYSUTCDATETIME()");
         builder.HasIndex(source => new { source.MessageID, source.Rank }).IsUnique();
         builder.HasOne(source => source.Message)

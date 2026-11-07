@@ -1,11 +1,20 @@
+using Microsoft.Extensions.Options;
+
 namespace ECommerce.Api.Features.AI.Indexing;
 
 public sealed class AiIndexWorker(
     IServiceScopeFactory scopeFactory,
+    IOptions<AiIndexingOptions> options,
     ILogger<AiIndexWorker> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        if (!options.Value.Enabled)
+        {
+            logger.LogInformation("AI indexing worker is disabled by configuration (AI:Indexing:Enabled).");
+            return;
+        }
+
         var lastBackfillAt = DateTime.UtcNow;
         try
         {

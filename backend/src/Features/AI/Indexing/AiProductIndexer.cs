@@ -79,4 +79,5 @@ public sealed class AiIndexingOptions
     public string EmbeddingModel { get; set; } = "bge-m3";
     public int BackfillBatchSize { get; set; } = 200;
     public int MaxAttempts { get; set; } = 5;
+    public bool Enabled { get; set; } = true;
 }

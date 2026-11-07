@@ -17,6 +17,7 @@ public static class AiModule
             options.EmbeddingModel = configuration["AI:Ollama:EmbeddingModel"] ?? "bge-m3";
             options.BackfillBatchSize = configuration.GetValue("AI:Indexing:BackfillBatchSize", 200);
             options.MaxAttempts = configuration.GetValue("AI:Indexing:MaxAttempts", 5);
+            options.Enabled = configuration.GetValue("AI:Indexing:Enabled", true);
         });
         services.Configure<AiQdrantOptions>(configuration.GetSection("AI:Qdrant"));
         services.Configure<AiChatOptions>(options =>
@@ -27,12 +28,12 @@ public static class AiModule
         });
 
         var ollamaEndpoint = new Uri(
-            configuration["AI:Ollama:Endpoint"] ?? "http://localhost:11434",
+            configuration["AI:Ollama:Endpoint"] ?? "http://localhost:11435",
             UriKind.Absolute);
         var embeddingModel = configuration["AI:Ollama:EmbeddingModel"] ?? "bge-m3";
+        // Registers IEmbeddingGenerator<string, Embedding<float>> without a service key, so it is
+        // resolvable directly. Do not add a forwarding registration: it would resolve itself and hang.
         services.AddOllamaEmbeddingGenerator(embeddingModel, ollamaEndpoint);
-        services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(provider =>
-            provider.GetRequiredKeyedService<IEmbeddingGenerator<string, Embedding<float>>>(serviceKey: null));
 
         services.AddSingleton(provider =>
         {
@@ -50,7 +51,7 @@ public static class AiModule
         {
 #pragma warning disable SKEXP0070
             services.AddGoogleAIGeminiChatCompletion(
-                modelId: configuration["Gemini:Model"] ?? "gemini-3.8-flash",
+                modelId: configuration["Gemini:Model"] ?? "gemini-3.5-flash",
                 apiKey: geminiApiKey,
                 apiVersion: GoogleAIVersion.V1);
 #pragma warning restore SKEXP0070
