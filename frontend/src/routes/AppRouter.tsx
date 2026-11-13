@@ -9,12 +9,14 @@ import ProfilePage from '../pages/ProfilePage';
 import CartPage from '../pages/CartPage';
 import ProductListPage from '../pages/ProductListPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
+import CheckoutPage from '../pages/CheckoutPage';
 
 
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
 import CategoryManagementPage from '../pages/admin/CategoryManagementPage';
 import UserManagementPage from '../pages/admin/UserManagementPage';
 import { ToastProvider } from '../contexts/ToastContext';
+import OrderHistoryPage from '../pages/OrderHistoryPage';
 
 export default function AppRouter() {
   return (
@@ -27,6 +29,8 @@ export default function AppRouter() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/products" element={<ProductListPage />} />
             <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/orders" element={<OrderHistoryPage />} />
           </Route>
 
           <Route path="/admin">
