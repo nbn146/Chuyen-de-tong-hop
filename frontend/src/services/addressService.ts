@@ -5,20 +5,20 @@ export const addressService = {
   getAddresses: (): Promise<AddressDto[]> => apiClient<AddressDto[]>('/api/addresses'),
 
   getAddressById: (id: number): Promise<AddressDto> =>
-    apiClient<AddressDto>(`/api/addresses/${id}`),
+    apiClient<AddressDto>(`/addresses/${id}`),
 
   createAddress: (data: AddressCreateRequest): Promise<AddressDto> =>
-    apiClient<AddressDto>('/api/addresses', {
+    apiClient<AddressDto>('/addresses', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   updateAddress: (id: number, data: AddressUpdateRequest): Promise<AddressDto> =>
-    apiClient<AddressDto>(`/api/addresses/${id}`, {
+    apiClient<AddressDto>(`/addresses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
 
   deleteAddress: (id: number): Promise<void> =>
-    apiClient<void>(`/api/addresses/${id}`, { method: 'DELETE' }),
+    apiClient<void>(`/addresses/${id}`, { method: 'DELETE' }),
 };
