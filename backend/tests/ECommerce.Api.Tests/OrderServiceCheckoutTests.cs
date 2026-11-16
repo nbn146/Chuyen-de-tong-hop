@@ -1,3 +1,4 @@
+using ECommerce.Api.Modules.Inventory;
 using ECommerce.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
@@ -148,7 +149,7 @@ public sealed class OrderServiceCheckoutTests
         {
             Context = context;
             this.connection = connection;
-            Service = new OrderService(context);
+            Service = new OrderService(context, new AddressLookup(context), new CheckoutCart(context), new StockLedger(context));
         }
 
         public static async Task<Fixture> CreateAsync(bool failAfterSave = false)

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using ECommerce.Api.Shared.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using ECommerce.Api.Modules.Identity;
-using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Modules.Orders.Contracts;
 
 namespace ECommerce.Api.Modules.Admin;
 

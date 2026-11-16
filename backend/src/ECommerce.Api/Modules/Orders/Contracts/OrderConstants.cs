@@ -1,4 +1,4 @@
-namespace ECommerce.Api.Modules.Orders;
+namespace ECommerce.Api.Modules.Orders.Contracts;
 
 public static class OrderConstants
 {

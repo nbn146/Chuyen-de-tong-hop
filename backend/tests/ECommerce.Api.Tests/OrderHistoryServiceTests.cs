@@ -1,3 +1,6 @@
+using ECommerce.Api.Modules.Inventory;
+using ECommerce.Api.Modules.ShoppingCart;
+using ECommerce.Api.Modules.Identity;
 using ECommerce.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using ECommerce.Api.Modules.Orders;
@@ -13,7 +16,7 @@ public sealed class OrderHistoryServiceTests
         await using var db = CreateContext();
         db.Orders.AddRange(Order(1, 7, new DateTime(2026, 1, 1), 10m), Order(2, 8, new DateTime(2026, 1, 3), 20m), Order(3, 7, new DateTime(2026, 1, 2), 30m));
         await db.SaveChangesAsync();
-        var result = await new OrderService(db).ListAsync(7, 1, 1);
+        var result = await new OrderService(db, new AddressLookup(db), new CheckoutCart(db), new StockLedger(db)).ListAsync(7, 1, 1);
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(3, Assert.Single(result.Items).OrderID);
         Assert.Equal(2, result.TotalPages);
@@ -26,7 +29,7 @@ public sealed class OrderHistoryServiceTests
     public async Task ListRejectsInvalidPaging(int page, int size)
     {
         await using var db = CreateContext();
-        await Assert.ThrowsAsync<DomainValidationException>(() => new OrderService(db).ListAsync(7, page, size));
+        await Assert.ThrowsAsync<DomainValidationException>(() => new OrderService(db, new AddressLookup(db), new CheckoutCart(db), new StockLedger(db)).ListAsync(7, page, size));
     }
 
     [Fact]
@@ -37,7 +40,7 @@ public sealed class OrderHistoryServiceTests
         owned.OrderDetails.Add(new OrderDetail { OrderDetailID = 9, ProductID = 2, ProductName = "Snapshot", SKU = "SKU", Quantity = 2, UnitPrice = 10m, TotalPrice = 20m });
         db.Orders.AddRange(owned, Order(5, 8, DateTime.UtcNow, 30m));
         await db.SaveChangesAsync();
-        var service = new OrderService(db);
+        var service = new OrderService(db, new AddressLookup(db), new CheckoutCart(db), new StockLedger(db));
         var detail = await service.GetAsync(7, 4);
         Assert.Equal("Old address", detail.ShippingAddress);
         Assert.Equal("Snapshot", Assert.Single(detail.Items).ProductName);

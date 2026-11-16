@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Api.Modules.Orders;
+namespace ECommerce.Api.Modules.Orders.Contracts;
 
 public class UpdateOrderStatusDto
 {

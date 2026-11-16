@@ -1,13 +1,19 @@
 using ECommerce.Api.Data;
 using Microsoft.EntityFrameworkCore;
-using ECommerce.Api.Modules.Catalog;
-using ECommerce.Api.Modules.Inventory;
+using ECommerce.Api.Modules.Identity.Contracts;
+using ECommerce.Api.Modules.Inventory.Contracts;
+using ECommerce.Api.Modules.Orders.Contracts;
+using ECommerce.Api.Modules.ShoppingCart.Contracts;
 using ECommerce.Api.Shared;
 using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Modules.Orders;
 
-public sealed class OrderService(AppDbContext context) : IOrderService
+public sealed class OrderService(
+    AppDbContext context,
+    IAddressLookup addresses,
+    ICheckoutCart checkoutCart,
+    IStockLedger stockLedger) : IOrderService
 {
     public async Task<OrderDetailDto> CheckoutAsync(int userId, CheckoutDto dto, CancellationToken ct = default)
     {
@@ -18,37 +24,32 @@ public sealed class OrderService(AppDbContext context) : IOrderService
         }
 
         await using var transaction = await context.Database.BeginTransactionAsync(ct);
-        var address = await context.Addresses
-            .SingleOrDefaultAsync(x => x.AddressID == dto.AddressID && x.UserID == userId, ct)
+        var address = await addresses.FindOwnedAsync(userId, dto.AddressID, ct)
             ?? throw new ResourceNotFoundException();
-        var cart = await context.Carts
-            .Include(x => x.Items)
-            .ThenInclude(x => x.Product)
-            .SingleOrDefaultAsync(x => x.UserID == userId, ct);
+        var lines = await checkoutCart.GetLinesAsync(userId, ct);
 
-        if (cart is null || cart.Items.Count == 0)
+        if (lines is null || lines.Count == 0)
         {
             throw new DomainValidationException();
         }
 
-        foreach (var line in cart.Items)
+        foreach (var line in lines)
         {
-            if (line.Quantity <= 0 || line.Product is null || !line.Product.IsActive || line.Quantity > line.Product.StockQuantity)
+            if (line.Quantity <= 0 || !line.IsActive || line.Quantity > line.StockQuantity)
             {
                 throw new DomainValidationException();
             }
         }
 
-        var items = cart.Items
-            .OrderBy(x => x.CartItemID)
+        var items = lines
             .Select(x => new OrderDetail
             {
-                ProductID = x.ProductID,
-                ProductName = x.Product.ProductName,
-                SKU = x.Product.SKU,
+                ProductID = x.ProductId,
+                ProductName = x.ProductName,
+                SKU = x.Sku,
                 Quantity = x.Quantity,
-                UnitPrice = x.Product.Price,
-                TotalPrice = x.Product.Price * x.Quantity
+                UnitPrice = x.UnitPrice,
+                TotalPrice = x.UnitPrice * x.Quantity
             })
             .ToList();
         var subTotal = items.Sum(x => x.TotalPrice);
@@ -72,7 +73,7 @@ public sealed class OrderService(AppDbContext context) : IOrderService
         };
 
         context.Orders.Add(order);
-        context.CartItems.RemoveRange(cart.Items);
+        await checkoutCart.ClearAsync(userId, ct);
         await context.SaveChangesAsync(ct);
         await transaction.CommitAsync(ct);
         return MapDetail(order);
@@ -170,28 +171,12 @@ public sealed class OrderService(AppDbContext context) : IOrderService
         order.CancelledAt = DateTime.UtcNow;
         order.UpdatedAt = DateTime.UtcNow;
 
-        foreach (var detail in order.OrderDetails)
-        {
-            var product = await context.Products.SingleOrDefaultAsync(p => p.ProductID == detail.ProductID, ct);
-            if (product != null)
-            {
-                var prevStock = product.StockQuantity;
-                product.StockQuantity += detail.Quantity;
-                product.UpdatedAt = DateTime.UtcNow;
-
-                context.InventoryTransactions.Add(new InventoryTransaction
-                {
-                    ProductID = detail.ProductID,
-                    TransactionType = "CANCEL_ORDER",
-                    Quantity = detail.Quantity,
-                    PreviousStock = prevStock,
-                    NewStock = product.StockQuantity,
-                    Note = $"Cancel order #{order.OrderID}",
-                    CreatedBy = userId,
-                    CreatedAt = DateTime.UtcNow
-                });
-            }
-        }
+        await stockLedger.RestoreAsync(
+            order.OrderDetails.Select(d => new StockRestoreLine(d.ProductID, d.Quantity)).ToList(),
+            "CANCEL_ORDER",
+            $"Cancel order #{order.OrderID}",
+            userId,
+            ct);
 
         await context.SaveChangesAsync(ct);
         await transaction.CommitAsync(ct);

@@ -1,4 +1,5 @@
-﻿
+﻿using ECommerce.Api.Modules.Orders.Contracts;
+
 namespace ECommerce.Api.Modules.Admin;
 
 public interface IAdminService

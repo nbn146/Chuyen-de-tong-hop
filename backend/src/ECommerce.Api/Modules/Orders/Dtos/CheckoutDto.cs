@@ -1,3 +1,4 @@
+using ECommerce.Api.Modules.Orders.Contracts;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Api.Modules.Orders;

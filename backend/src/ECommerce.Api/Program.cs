@@ -44,34 +44,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IAddressService, AddressService>();
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddAiModule(builder.Configuration);
-builder.Services.AddSingleton(serviceProvider =>
-{
-    var section = serviceProvider
-        .GetRequiredService<IConfiguration>()
-        .GetSection("BootstrapAdmin");
-
-    return new BootstrapAdminOptions(
-        section["Email"],
-        section["Password"],
-        section["FullName"]);
-});
-builder.Services.AddScoped<DevelopmentAdminBootstrapper>();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHostedService<DevelopmentAdminBootstrapHostedService>();
-}
+builder.Services.AddIdentityModule(builder.Environment);
+builder.Services.AddCatalogModule();
+builder.Services.AddInventoryModule();
+builder.Services.AddShoppingCartModule();
+builder.Services.AddOrdersModule();
+builder.Services.AddAdminModule();
 
 builder.Services.AddAuthentication(options =>
 {
