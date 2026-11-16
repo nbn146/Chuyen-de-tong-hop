@@ -190,7 +190,7 @@ public sealed class OrderServiceCheckoutTests
                 CREATE TABLE InventoryTransactions (
                     InventoryTransactionID INTEGER PRIMARY KEY AUTOINCREMENT, ProductID INTEGER NOT NULL,
                     TransactionType TEXT NOT NULL, Quantity INTEGER NOT NULL, PreviousStock INTEGER NOT NULL,
-                    NewStock INTEGER NOT NULL, Note TEXT NULL, CreatedBy INTEGER NULL,
+                    NewStock INTEGER NOT NULL, ReferenceID INTEGER NULL, Note TEXT NULL, CreatedBy INTEGER NULL,
                     CreatedAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
                 """);
             db.Addresses.AddRange(

@@ -11,7 +11,9 @@ using ECommerce.Api.Services.Auth;
 using ECommerce.Api.Services.Admin;
 using ECommerce.Api.Services.Inventory;
 using ECommerce.Api.Services.Reports;
-using ECommerce.Api.Services.Chat;
+using ECommerce.Api.Modules.AI;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -57,7 +59,7 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddHttpClient<IChatService, ChatService>();
+builder.Services.AddAiModule(builder.Configuration);
 builder.Services.AddSingleton(serviceProvider =>
 {
     var section = serviceProvider
@@ -93,6 +95,20 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = audience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("ai-chat", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 30,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+            AutoReplenishment = true
+        }));
 });
 
 builder.Services.AddOpenApi();
@@ -132,6 +148,7 @@ if (!app.Environment.IsEnvironment("Testing"))
 }
 
 app.UseCors("Frontend");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

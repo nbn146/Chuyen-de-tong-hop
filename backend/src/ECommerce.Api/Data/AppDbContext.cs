@@ -1,4 +1,5 @@
 using ECommerce.Api.Entities;
+using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -25,6 +26,13 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
     public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
+
+    // ─── AI ──────────────────────────────────────────────────
+    public DbSet<AiKnowledgeChunk> AiKnowledgeChunks => Set<AiKnowledgeChunk>();
+    public DbSet<AiIndexJob> AiIndexJobs => Set<AiIndexJob>();
+    public DbSet<AiChatSession> AiChatSessions => Set<AiChatSession>();
+    public DbSet<AiChatMessage> AiChatMessages => Set<AiChatMessage>();
+    public DbSet<AiMessageSource> AiMessageSources => Set<AiMessageSource>();
 
     // ─── Cart ────────────────────────────────────────────────
     public DbSet<Cart> Carts => Set<Cart>();

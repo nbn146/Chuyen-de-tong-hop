@@ -396,7 +396,7 @@ namespace ECommerce.Api.Migrations
                         {
                             t.HasCheckConstraint("CK_Orders_OrderStatus", "[OrderStatus] IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')");
 
-                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] IN ('COD','QR')");
+                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] = 'COD'");
 
                             t.HasCheckConstraint("CK_Orders_PaymentStatus", "[PaymentStatus] IN ('PENDING','PAID','FAILED')");
 
@@ -781,6 +781,242 @@ namespace ECommerce.Api.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
+                {
+                    b.Property<long>("MessageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("MessageID"));
+
+                    b.Property<string>("AnswerType")
+                        .HasMaxLength(32)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<string>("ModelName")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(16)");
+
+                    b.Property<Guid>("SessionID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MessageID");
+
+                    b.HasIndex("SessionID", "CreatedAt");
+
+                    b.ToTable("AIChatMessages", (string)null);
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
+                {
+                    b.Property<Guid>("SessionID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GuestTokenHash")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("SessionID");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("UserID", "UpdatedAt");
+
+                    b.ToTable("AIChatSessions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_AIChatSessions_Owner", "([UserID] IS NOT NULL AND [GuestTokenHash] IS NULL) OR ([UserID] IS NULL AND [GuestTokenHash] IS NOT NULL)");
+                        });
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiIndexJob", b =>
+                {
+                    b.Property<long>("JobID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("JobID"));
+
+                    b.Property<int>("Attempts")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime?>("NextAttemptAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("JobID");
+
+                    b.HasIndex("ProductID", "Status");
+
+                    b.HasIndex("Status", "NextAttemptAt", "CreatedAt");
+
+                    b.ToTable("AIIndexJobs", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_AIIndexJobs_Attempts", "[Attempts] >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiKnowledgeChunk", b =>
+                {
+                    b.Property<Guid>("ChunkID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ChunkOrdinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<string>("EmbeddingModel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("IndexedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("ChunkID");
+
+                    b.HasIndex("ProductID", "ChunkOrdinal")
+                        .IsUnique();
+
+                    b.HasIndex("Status", "IndexedAt");
+
+                    b.ToTable("AIKnowledgeChunks", (string)null);
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiMessageSource", b =>
+                {
+                    b.Property<long>("SourceID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SourceID"));
+
+                    b.Property<Guid?>("ChunkID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<long>("MessageID")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SourceType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("SourceVersion")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.HasKey("SourceID");
+
+                    b.HasIndex("ChunkID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("MessageID", "Rank")
+                        .IsUnique();
+
+                    b.ToTable("AIMessageSources", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_AIMessageSources_Chunk", "([SourceType] = 'vector' AND [ChunkID] IS NOT NULL AND [SourceVersion] IS NOT NULL) OR ([SourceType] <> 'vector' AND [ChunkID] IS NULL AND [SourceVersion] IS NULL)");
+
+                            t.HasCheckConstraint("CK_AIMessageSources_SourceType", "[SourceType] IN ('vector', 'lexical', 'catalog')");
+                        });
+                });
+
             modelBuilder.Entity("ECommerce.Api.Entities.Address", b =>
                 {
                     b.HasOne("ECommerce.Api.Entities.User", "User")
@@ -979,6 +1215,78 @@ namespace ECommerce.Api.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.AI.Entities.AiChatSession", "Session")
+                        .WithMany("Messages")
+                        .HasForeignKey("SessionID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AIChatMessages_Sessions");
+
+                    b.Navigation("Session");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
+                {
+                    b.HasOne("ECommerce.Api.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_AIChatSessions_Users");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiIndexJob", b =>
+                {
+                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AIIndexJobs_Products");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiKnowledgeChunk", b =>
+                {
+                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AIKnowledgeChunks_Products");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiMessageSource", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.AI.Entities.AiKnowledgeChunk", "Chunk")
+                        .WithMany()
+                        .HasForeignKey("ChunkID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_AIMessageSources_Chunks");
+
+                    b.HasOne("ECommerce.Api.Modules.AI.Entities.AiChatMessage", "Message")
+                        .WithMany("Sources")
+                        .HasForeignKey("MessageID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AIMessageSources_Messages");
+
+                    b.HasOne("ECommerce.Api.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AIMessageSources_Products");
+
+                    b.Navigation("Chunk");
+
+                    b.Navigation("Message");
+                });
+
             modelBuilder.Entity("ECommerce.Api.Entities.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -1030,6 +1338,16 @@ namespace ECommerce.Api.Migrations
                     b.Navigation("PasswordResetTokens");
 
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
+                {
+                    b.Navigation("Sources");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
