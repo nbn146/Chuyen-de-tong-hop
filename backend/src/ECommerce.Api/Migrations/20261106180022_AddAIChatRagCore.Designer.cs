@@ -399,7 +399,7 @@ namespace ECommerce.Api.Migrations
                         {
                             t.HasCheckConstraint("CK_Orders_OrderStatus", "[OrderStatus] IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')");
 
-                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] = 'COD'");
+                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] IN ('COD','QR')");
 
                             t.HasCheckConstraint("CK_Orders_PaymentStatus", "[PaymentStatus] IN ('PENDING','PAID','FAILED')");
 

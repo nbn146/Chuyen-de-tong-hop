@@ -64,10 +64,9 @@ frontend/src/
   shared/{components,layouts,services,context,config}
 ```
 
-Feature không import trực tiếp nội bộ của feature khác ngoài `services`/`types` công khai; thành phần dùng chung đặt trong `shared/`.
+Mục tiêu: feature không import nội bộ của feature khác; thành phần dùng chung đặt trong `shared/`. Hiện chưa đạt hoàn toàn: `shared/components/Header` và `shared/services/apiClient` còn import từ `features/auth`, `features/cart`, `features/catalog`. Chưa có test kiểm tra phía frontend.
 
 ## Ghi chú vận hành
 
 - Migration `AddAIChatRagCore` trùng tên được gộp thành bản `20261106180022`. Database nào đã áp dụng bản `20261021155203` cần xử lý thủ công trong `__EFMigrationsHistory`.
-- Model EF hiện có một khác biệt có sẵn từ trước refactor: check constraint `CK_Orders_PaymentMethod` (`'COD','QR'` trong code, `'COD'` trong snapshot). Cần một migration riêng.
 - `ChatService` cũ và test của nó đã bị thay bằng module `AI`.
