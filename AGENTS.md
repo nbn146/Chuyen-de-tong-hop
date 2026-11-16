@@ -45,6 +45,7 @@ Sprint 2 supports COD and the approved mock QR flow: create a QR order with `PEN
 - Database: Microsoft SQL Server.
 - Roles: `Admin` and `Customer`.
 - Flow: React -> REST API -> Controller -> Service Layer -> EF Core / `AppDbContext` -> SQL Server.
+- Backend is a modular monolith (proposed, see `docs/modular-monolith.md`): code lives in `backend/src/ECommerce.Api/Modules/<Module>`; modules talk to each other only through `Contracts`, never through another module's Services or DbSets. `ModuleBoundaryTests` enforces this.
 - Frontend must never connect directly to the database.
 - Controllers handle HTTP concerns; business logic belongs in Services.
 - Use DTOs when returning an Entity would expose private data or couple clients to persistence.

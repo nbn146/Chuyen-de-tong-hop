@@ -125,7 +125,7 @@ React UI
 
 # **5\. Kiến trúc Backend**
 
-Backend sử dụng **Layered Architecture đơn giản**, gồm các thành phần chính:
+Backend sử dụng **Layered Architecture đơn giản**, được tổ chức thành các module nghiệp vụ (xem [Modular Monolith](modular-monolith.md)). Trong mỗi module, luồng xử lý gồm:
 
 Controller  
     ↓  
