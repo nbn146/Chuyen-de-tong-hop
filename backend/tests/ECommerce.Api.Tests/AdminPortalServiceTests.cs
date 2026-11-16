@@ -18,7 +18,7 @@ public sealed class AdminPortalServiceTests
         await using var db = CreateContext();
         SeedUsersAndOrder(db);
         await db.SaveChangesAsync();
-        var service = new AdminService(new UserDirectory(db), new OrderAdministration(db, new StockLedger(db)));
+        var service = new AdminService(new UserDirectory(db), new OrderAdministration(db, new StockLedger(db, new ProductCatalog(db))));
 
         var result = await service.GetOrdersAsync(1, 10, "PENDING");
         Assert.Single(result.Items);
@@ -46,11 +46,11 @@ public sealed class AdminPortalServiceTests
         });
         await db.SaveChangesAsync();
 
-        var users = await new AdminService(new UserDirectory(db), new OrderAdministration(db, new StockLedger(db))).GetUsersAsync(1, 10, "Buyer");
+        var users = await new AdminService(new UserDirectory(db), new OrderAdministration(db, new StockLedger(db, new ProductCatalog(db)))).GetUsersAsync(1, 10, "Buyer");
         Assert.Single(users.Items);
         Assert.Equal(1, users.Items[0].OrderCount);
 
-        var inventory = new InventoryService(db);
+        var inventory = new InventoryService(db, new ProductCatalog(db));
         Assert.Single(await inventory.GetInventoryListAsync("LAP-5"));
         var updated = await inventory.UpdateStockAsync(5, 1, new UpdateStockDto
         {

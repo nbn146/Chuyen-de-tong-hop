@@ -1,10 +1,10 @@
 using ECommerce.Api.Data;
+using ECommerce.Api.Modules.Catalog.Contracts;
 using ECommerce.Api.Modules.Inventory.Contracts;
-using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Api.Modules.Inventory;
 
-public sealed class StockLedger(AppDbContext context) : IStockLedger
+public sealed class StockLedger(AppDbContext context, IProductCatalog catalog) : IStockLedger
 {
     public async Task RestoreAsync(
         IReadOnlyCollection<StockRestoreLine> lines,
@@ -15,24 +15,19 @@ public sealed class StockLedger(AppDbContext context) : IStockLedger
     {
         foreach (var line in lines)
         {
-            var product = await context.Products
-                .SingleOrDefaultAsync(p => p.ProductID == line.ProductId, cancellationToken);
-            if (product is null)
+            var change = await catalog.AdjustStockAsync(line.ProductId, line.Quantity, cancellationToken);
+            if (change is null)
             {
                 continue;
             }
-
-            var previousStock = product.StockQuantity;
-            product.StockQuantity += line.Quantity;
-            product.UpdatedAt = DateTime.UtcNow;
 
             context.InventoryTransactions.Add(new InventoryTransaction
             {
                 ProductID = line.ProductId,
                 TransactionType = transactionType,
                 Quantity = line.Quantity,
-                PreviousStock = previousStock,
-                NewStock = product.StockQuantity,
+                PreviousStock = change.PreviousStock,
+                NewStock = change.NewStock,
                 Note = note,
                 CreatedBy = actorUserId,
                 CreatedAt = DateTime.UtcNow

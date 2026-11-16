@@ -1,11 +1,11 @@
 using ECommerce.Api.Data;
 using Microsoft.EntityFrameworkCore;
-using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Catalog.Contracts;
 using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Modules.ShoppingCart;
 
-public sealed class CartService(AppDbContext context) : ICartService
+public sealed class CartService(AppDbContext context, IProductCatalog catalog) : ICartService
 {
     public async Task<CartDto> GetAsync(int userId, CancellationToken ct = default)
     {
@@ -25,7 +25,7 @@ public sealed class CartService(AppDbContext context) : ICartService
             context.Carts.Add(cart);
         }
 
-        var item = cart.Items.SingleOrDefault(candidate => candidate.ProductID == product.ProductID);
+        var item = cart.Items.SingleOrDefault(candidate => candidate.ProductID == product.ProductId);
         var quantity = (item?.Quantity ?? 0) + dto.Quantity;
         ValidateQuantity(quantity, product.StockQuantity);
 
@@ -33,8 +33,7 @@ public sealed class CartService(AppDbContext context) : ICartService
         {
             cart.Items.Add(new CartItem
             {
-                ProductID = product.ProductID,
-                Product = product,
+                ProductID = product.ProductId,
                 Quantity = quantity,
                 AddedAt = DateTime.UtcNow
             });
@@ -54,7 +53,8 @@ public sealed class CartService(AppDbContext context) : ICartService
             throw new DomainConflictException();
         }
 
-        return ToDto(cart);
+        // Reload so every line carries its product details for the response.
+        return ToDto(await LoadCartAsync(userId, false, ct) ?? cart);
     }
 
     public async Task<CartDto> UpdateAsync(
@@ -105,11 +105,9 @@ public sealed class CartService(AppDbContext context) : ICartService
         return query.SingleOrDefaultAsync(cart => cart.UserID == userId, ct);
     }
 
-    private async Task<Product> GetAvailableProductAsync(int productId, CancellationToken ct)
+    private async Task<ProductSnapshot> GetAvailableProductAsync(int productId, CancellationToken ct)
     {
-        return await context.Products
-            .Include(product => product.Images)
-            .SingleOrDefaultAsync(product => product.ProductID == productId && product.IsActive, ct)
+        return await catalog.FindActiveAsync(productId, ct)
             ?? throw new ResourceNotFoundException();
     }
 

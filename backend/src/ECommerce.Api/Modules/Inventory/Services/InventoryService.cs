@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.Data;
+﻿using ECommerce.Api.Modules.Catalog.Contracts;
+using ECommerce.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using ECommerce.Api.Modules.Catalog;
 using ECommerce.Api.Shared.Exceptions;
@@ -11,39 +12,18 @@ public class InventoryService : IInventoryService
 
     private static readonly string[] ValidTransactionTypes = ["Import", "Export", "Adjustment"];
 
-    public InventoryService(AppDbContext context)
+    private readonly IProductCatalog _catalog;
+
+    public InventoryService(AppDbContext context, IProductCatalog catalog)
     {
         _context = context;
+        _catalog = catalog;
     }
 
     public async Task<List<InventoryDto>> GetInventoryListAsync(string? keyword, CancellationToken cancellationToken = default)
     {
-        var query = _context.Products
-            .Include(p => p.Category)
-            .Include(p => p.Brand)
-            .AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(keyword))
-        {
-            var kw = keyword.ToLower();
-            query = query.Where(p =>
-                p.ProductName.ToLower().Contains(kw) ||
-                p.SKU.ToLower().Contains(kw));
-        }
-
-        return await query
-            .OrderBy(p => p.ProductName)
-            .Select(p => new InventoryDto
-            {
-                ProductId = p.ProductID,
-                ProductName = p.ProductName,
-                Sku = p.SKU,
-                StockQuantity = p.StockQuantity,
-                CategoryName = p.Category.CategoryName,
-                BrandName = p.Brand.BrandName,
-                IsActive = p.IsActive
-            })
-            .ToListAsync(cancellationToken);
+        var items = await _catalog.ListStockAsync(keyword, cancellationToken);
+        return items.Select(ToDto).ToList();
     }
 
     public async Task<InventoryDto> UpdateStockAsync(int productId, int adminUserId, UpdateStockDto dto, CancellationToken cancellationToken = default)
@@ -51,10 +31,7 @@ public class InventoryService : IInventoryService
         if (!ValidTransactionTypes.Contains(dto.TransactionType))
             throw new DomainValidationException();
 
-        var product = await _context.Products
-            .Include(p => p.Category)
-            .Include(p => p.Brand)
-            .FirstOrDefaultAsync(p => p.ProductID == productId, cancellationToken)
+        var product = await _catalog.GetStockAsync(productId, cancellationToken)
             ?? throw new ResourceNotFoundException();
 
         var previousStock = product.StockQuantity;
@@ -84,8 +61,7 @@ public class InventoryService : IInventoryService
                 throw new DomainValidationException();
         }
 
-        product.StockQuantity = newStock;
-        product.UpdatedAt = DateTime.UtcNow;
+        await _catalog.AdjustStockAsync(productId, newStock - previousStock, cancellationToken);
 
         var storedType = dto.TransactionType switch
         {
@@ -108,17 +84,19 @@ public class InventoryService : IInventoryService
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new InventoryDto
-        {
-            ProductId = product.ProductID,
-            ProductName = product.ProductName,
-            Sku = product.SKU,
-            StockQuantity = product.StockQuantity,
-            CategoryName = product.Category.CategoryName,
-            BrandName = product.Brand.BrandName,
-            IsActive = product.IsActive
-        };
+        return ToDto(product with { StockQuantity = newStock });
     }
+
+    private static InventoryDto ToDto(ProductStockInfo p) => new()
+    {
+        ProductId = p.ProductId,
+        ProductName = p.ProductName,
+        Sku = p.Sku,
+        StockQuantity = p.StockQuantity,
+        CategoryName = p.CategoryName,
+        BrandName = p.BrandName,
+        IsActive = p.IsActive
+    };
 
     public async Task<List<InventoryTransactionDto>> GetTransactionsAsync(int productId, CancellationToken cancellationToken = default)
     {

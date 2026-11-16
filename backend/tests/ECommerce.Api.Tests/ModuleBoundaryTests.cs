@@ -34,9 +34,6 @@ public sealed partial class ModuleBoundaryTests
     /// </summary>
     private static readonly HashSet<string> AllowedDbSetAccess =
     [
-        "Inventory->Products",    // stock quantity is stored on the product row
-        "ShoppingCart->Products", // add-to-cart validates the product
-        "AI->Products",           // product indexing reads the catalog
         "Admin->Orders",          // ReportService read model
         "Admin->OrderDetails",    // ReportService read model
         "Admin->Products",        // ReportService read model

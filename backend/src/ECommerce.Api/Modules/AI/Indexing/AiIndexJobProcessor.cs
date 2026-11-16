@@ -1,3 +1,4 @@
+using ECommerce.Api.Modules.Catalog.Contracts;
 using ECommerce.Api.Data;
 using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ namespace ECommerce.Api.Modules.AI.Indexing;
 
 public sealed class AiIndexJobProcessor(
     AppDbContext dbContext,
+    IProductCatalog catalog,
     IAiProductIndexer productIndexer,
     IOptions<AiIndexingOptions> options,
     ILogger<AiIndexJobProcessor> logger) : IAiIndexJobProcessor
@@ -15,14 +17,14 @@ public sealed class AiIndexJobProcessor(
 
     public async Task EnqueueMissingProductsAsync(CancellationToken cancellationToken)
     {
-        var productIds = await dbContext.Products
-            .Where(product => product.IsActive)
-            .Where(product => !dbContext.AiKnowledgeChunks.Any(chunk => chunk.ProductID == product.ProductID))
-            .Where(product => !dbContext.AiIndexJobs.Any(job => job.ProductID == product.ProductID))
-            .OrderBy(product => product.ProductID)
-            .Select(product => product.ProductID)
+        var activeIds = await catalog.GetActiveProductIdsAsync(cancellationToken);
+        var indexed = await dbContext.AiKnowledgeChunks.Select(chunk => chunk.ProductID).Distinct().ToListAsync(cancellationToken);
+        var queued = await dbContext.AiIndexJobs.Select(queuedJob => queuedJob.ProductID).Distinct().ToListAsync(cancellationToken);
+        var known = indexed.Concat(queued).ToHashSet();
+        var productIds = activeIds
+            .Where(id => !known.Contains(id))
             .Take(_options.BackfillBatchSize)
-            .ToListAsync(cancellationToken);
+            .ToList();
 
         if (productIds.Count == 0)
         {

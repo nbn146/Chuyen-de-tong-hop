@@ -1,3 +1,4 @@
+using ECommerce.Api.Modules.Catalog.Contracts;
 using ECommerce.Api.Data;
 using ECommerce.Api.Modules.AI.Entities;
 using ECommerce.Api.Modules.AI.VectorStore;
@@ -10,6 +11,7 @@ namespace ECommerce.Api.Modules.AI.Indexing;
 
 public sealed class AiProductIndexer(
     AppDbContext dbContext,
+    IProductCatalog catalog,
     IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
     IAiVectorStore vectorStore,
     IOptions<AiIndexingOptions> options) : IAiProductIndexer
@@ -18,11 +20,7 @@ public sealed class AiProductIndexer(
 
     public async Task IndexProductAsync(int productId, CancellationToken cancellationToken)
     {
-        var product = await dbContext.Products
-            .Include(item => item.Category)
-            .Include(item => item.Brand)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(item => item.ProductID == productId, cancellationToken);
+        var product = await catalog.GetIndexSourceAsync(productId, cancellationToken);
 
         var chunk = await dbContext.AiKnowledgeChunks
             .FirstOrDefaultAsync(item => item.ProductID == productId && item.ChunkOrdinal == 0, cancellationToken);

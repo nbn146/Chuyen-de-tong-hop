@@ -42,17 +42,15 @@ Quy tắc 1, 2, 3 được kiểm tra tự động bởi `backend/tests/ECommerc
 | Identity | `IAddressLookup`, `IUserDirectory` | Orders, Admin |
 | ShoppingCart | `ICheckoutCart` | Orders |
 | Orders | `IOrderAdministration`, `OrderConstants`, DTO quản trị đơn hàng | Admin |
+| Catalog | `IProductCatalog` (đọc sản phẩm, chỉnh tồn kho, nguồn indexing) | ShoppingCart, Inventory, AI |
 
 ## Nợ kỹ thuật đã ghi nhận
 
 `ModuleBoundaryTests.AllowedDbSetAccess` liệt kê các truy cập chéo còn lại. Danh sách này chỉ được **giảm**; test sẽ báo lỗi nếu một mục không còn cần thiết.
 
-- `Inventory -> Products`: số lượng tồn lưu trên bảng `Products`.
-- `ShoppingCart -> Products`: kiểm tra sản phẩm khi thêm vào giỏ.
-- `AI -> Products`: indexing đọc catalog.
 - `Admin -> Orders, OrderDetails, Products, Users`: `ReportService` là read model.
 
-Bước tiếp theo đề xuất: thêm `Catalog.Contracts.IProductCatalog` cho Cart, Inventory và AI; tách `ReportService` thành các truy vấn đọc theo từng module.
+Bước tiếp theo đề xuất: tách `ReportService` thành các truy vấn đọc theo từng module (ví dụ `IOrderReports`, `IUserDirectory.CountAsync`). Sau đó allow-list sẽ rỗng.
 
 ## Frontend
 

@@ -1,3 +1,4 @@
+using ECommerce.Api.Modules.Catalog.Contracts;
 using System.Security.Cryptography;
 using System.Text;
 using ECommerce.Api.Data;
@@ -270,7 +271,7 @@ public sealed class AiChatService(
                     continue;
                 }
 
-                var currentDocument = AiProductDocumentBuilder.Build(chunk.Product);
+                var currentDocument = AiProductDocumentBuilder.Build(ProductIndexSource.From(chunk.Product));
                 if (!string.Equals(currentDocument.Hash, chunk.ContentHash, StringComparison.Ordinal))
                 {
                     continue;

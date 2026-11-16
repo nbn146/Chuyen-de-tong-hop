@@ -1,17 +1,15 @@
+using ECommerce.Api.Modules.Catalog.Contracts;
 using ECommerce.Api.Data;
 using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Api.Modules.AI.Indexing;
 
-public sealed class AiIndexAdminService(AppDbContext dbContext) : IAiIndexAdminService
+public sealed class AiIndexAdminService(AppDbContext dbContext, IProductCatalog catalog) : IAiIndexAdminService
 {
     public async Task<int> QueueRebuildAsync(CancellationToken cancellationToken)
     {
-        var productIds = await dbContext.Products
-            .Where(product => product.IsActive)
-            .Select(product => product.ProductID)
-            .ToListAsync(cancellationToken);
+        var productIds = await catalog.GetActiveProductIdsAsync(cancellationToken);
 
         dbContext.AiIndexJobs.AddRange(productIds.Select(productId => new AiIndexJob
         {

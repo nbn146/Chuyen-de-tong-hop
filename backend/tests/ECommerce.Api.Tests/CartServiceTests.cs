@@ -86,7 +86,7 @@ public sealed class CartServiceTests
         private CartFixture(AppDbContext context)
         {
             Context = context;
-            Service = new CartService(context);
+            Service = new CartService(context, new ProductCatalog(context));
         }
 
         public static CartFixture Create()

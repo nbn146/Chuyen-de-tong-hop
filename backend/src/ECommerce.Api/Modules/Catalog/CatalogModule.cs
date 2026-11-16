@@ -1,3 +1,5 @@
+using ECommerce.Api.Modules.Catalog.Contracts;
+
 namespace ECommerce.Api.Modules.Catalog;
 
 public static class CatalogModule
@@ -6,6 +8,7 @@ public static class CatalogModule
     {
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductCatalog, ProductCatalog>();
         return services;
     }
 }

@@ -149,7 +149,7 @@ public sealed class OrderServiceCheckoutTests
         {
             Context = context;
             this.connection = connection;
-            Service = new OrderService(context, new AddressLookup(context), new CheckoutCart(context), new StockLedger(context));
+            Service = new OrderService(context, new AddressLookup(context), new CheckoutCart(context), new StockLedger(context, new ProductCatalog(context)));
         }
 
         public static async Task<Fixture> CreateAsync(bool failAfterSave = false)
