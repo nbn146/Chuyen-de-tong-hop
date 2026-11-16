@@ -1,0 +1,27 @@
+using ECommerce.Api.Data;
+using ECommerce.Api.Modules.AI.Entities;
+using ECommerce.Api.Modules.Catalog;
+
+namespace ECommerce.Api.Modules.AI.Indexing;
+
+public sealed class AiIndexQueue(AppDbContext dbContext) : IAiIndexQueue
+{
+    public void Enqueue(Product product)
+    {
+        dbContext.AiIndexJobs.Add(new AiIndexJob
+        {
+            ProductID = product.ProductID,
+            Product = product,
+            Status = AiIndexStatuses.Pending,
+            CreatedAt = DateTime.UtcNow
+        });
+    }
+
+    public void EnqueueRange(IEnumerable<Product> products)
+    {
+        foreach (var product in products)
+        {
+            Enqueue(product);
+        }
+    }
+}

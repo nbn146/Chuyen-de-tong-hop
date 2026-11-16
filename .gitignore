@@ -1,0 +1,38 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Node and frontend output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Local.json
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
+
+
+# Workspace and local configuration
+.worktrees/
+.repo-sync/
+**/appsettings.Development.json
+*.zip
+*.mp4
