@@ -1,11 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using ECommerce.Api.DTOs;
-using ECommerce.Api.DTOs.Products;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Products;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Shared;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

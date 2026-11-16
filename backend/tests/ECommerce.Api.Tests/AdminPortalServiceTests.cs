@@ -1,11 +1,11 @@
 ﻿using ECommerce.Api.Data;
-using ECommerce.Api.DTOs.Inventory;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Admin;
-using ECommerce.Api.Services.Inventory;
-using ECommerce.Api.Services.Reports;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Modules.Admin;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Modules.Inventory;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

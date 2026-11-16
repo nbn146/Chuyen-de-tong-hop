@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using ECommerce.Api.DTOs.Orders;
+using ECommerce.Api.Modules.Orders;
 
 namespace ECommerce.Api.Tests;
 

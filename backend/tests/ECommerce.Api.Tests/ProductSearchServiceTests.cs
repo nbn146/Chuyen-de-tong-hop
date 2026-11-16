@@ -1,8 +1,6 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.DTOs.Products;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Services.Products;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Modules.Catalog;
 
 namespace ECommerce.Api.Tests;
 

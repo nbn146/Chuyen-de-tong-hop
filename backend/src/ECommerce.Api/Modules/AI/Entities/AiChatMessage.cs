@@ -1,3 +1,5 @@
+using ECommerce.Api.Modules.Identity;
+
 namespace ECommerce.Api.Modules.AI.Entities;
 
 public sealed class AiChatMessage

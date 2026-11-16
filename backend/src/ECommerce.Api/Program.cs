@@ -1,16 +1,4 @@
-using ECommerce.Api.Configuration;
 using ECommerce.Api.Data;
-using ECommerce.Api.Middleware;
-using ECommerce.Api.Services.Products;
-using ECommerce.Api.Services.Categories;
-using ECommerce.Api.Services.Profile;
-using ECommerce.Api.Services.Cart;
-using ECommerce.Api.Services.Orders;
-using ECommerce.Api.Services.Addresses;
-using ECommerce.Api.Services.Auth;
-using ECommerce.Api.Services.Admin;
-using ECommerce.Api.Services.Inventory;
-using ECommerce.Api.Services.Reports;
 using ECommerce.Api.Modules.AI;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
@@ -18,6 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ECommerce.Api.Modules.Admin;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Modules.Inventory;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Modules.ShoppingCart;
+using ECommerce.Api.Shared.Middleware;
 
 static string RequireConfigurationValue(IConfiguration configuration, string key)
 {

@@ -1,11 +1,12 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.DTOs.Orders;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Modules.ShoppingCart;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

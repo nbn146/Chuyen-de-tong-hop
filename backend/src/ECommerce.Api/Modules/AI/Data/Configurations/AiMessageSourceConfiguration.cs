@@ -1,7 +1,7 @@
-using ECommerce.Api.Entities;
 using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ECommerce.Api.Modules.Catalog;
 
 namespace ECommerce.Api.Modules.AI.Data.Configurations;
 

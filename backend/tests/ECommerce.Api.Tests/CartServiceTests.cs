@@ -1,9 +1,8 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.DTOs.Cart;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Cart;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.ShoppingCart;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

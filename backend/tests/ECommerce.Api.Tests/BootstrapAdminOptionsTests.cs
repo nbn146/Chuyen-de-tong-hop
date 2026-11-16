@@ -1,4 +1,5 @@
-using ECommerce.Api.Configuration;
+using ECommerce.Api.Modules.Identity;
+
 
 namespace ECommerce.Api.Tests;
 

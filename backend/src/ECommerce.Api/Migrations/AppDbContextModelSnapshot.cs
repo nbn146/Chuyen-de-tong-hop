@@ -22,765 +22,6 @@ namespace ECommerce.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Address", b =>
-                {
-                    b.Property<int>("AddressID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("District")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Province")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverPhone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Ward")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("AddressID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Addresses", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Brand", b =>
-                {
-                    b.Property<int>("BrandID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandID"));
-
-                    b.Property<string>("BrandName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("LogoURL")
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BrandID");
-
-                    b.HasIndex("BrandName")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Brands_Name");
-
-                    b.ToTable("Brands", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Cart", b =>
-                {
-                    b.Property<int>("CartID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartID");
-
-                    b.HasIndex("UserID")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Carts_User");
-
-                    b.ToTable("Carts", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.CartItem", b =>
-                {
-                    b.Property<long>("CartItemID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CartItemID"));
-
-                    b.Property<DateTime>("AddedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<int>("CartID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CartItemID");
-
-                    b.HasIndex("ProductID");
-
-                    b.HasIndex("CartID", "ProductID")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_CartItems_Cart_Product");
-
-                    b.ToTable("CartItems", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_CartItems_Quantity", "[Quantity] > 0");
-                        });
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Category", b =>
-                {
-                    b.Property<int>("CategoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<int?>("ParentID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CategoryID");
-
-                    b.HasIndex("CategoryName")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Categories_Name");
-
-                    b.HasIndex("ParentID");
-
-                    b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.InventoryTransaction", b =>
-                {
-                    b.Property<long>("InventoryTransactionID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("InventoryTransactionID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NewStock")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("PreviousStock")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("ReferenceID")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("InventoryTransactionID");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("InventoryTransactions", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Inventory_NewStock", "[NewStock] >= 0");
-
-                            t.HasCheckConstraint("CK_Inventory_Type", "[TransactionType] IN ('IMPORT','SALE','RETURN','ADJUSTMENT','CANCEL_ORDER')");
-                        });
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Order", b =>
-                {
-                    b.Property<long>("OrderID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderID"));
-
-                    b.Property<DateTime?>("CancelledAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ConfirmedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("District")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)")
-                        .HasDefaultValue("PENDING");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)")
-                        .HasDefaultValue("COD");
-
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)")
-                        .HasDefaultValue("PENDING");
-
-                    b.Property<string>("Province")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverPhone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("ShippingAddress")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<decimal>("ShippingFee")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Ward")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("OrderID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Orders", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Orders_OrderStatus", "[OrderStatus] IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')");
-
-                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] = 'COD'");
-
-                            t.HasCheckConstraint("CK_Orders_PaymentStatus", "[PaymentStatus] IN ('PENDING','PAID','FAILED')");
-
-                            t.HasCheckConstraint("CK_Orders_ShippingFee", "[ShippingFee] >= 0");
-
-                            t.HasCheckConstraint("CK_Orders_SubTotal", "[SubTotal] >= 0");
-
-                            t.HasCheckConstraint("CK_Orders_TotalAmount", "[TotalAmount] >= 0");
-                        });
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.OrderDetail", b =>
-                {
-                    b.Property<long>("OrderDetailID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderDetailID"));
-
-                    b.Property<long>("OrderID")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SKU")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("[Quantity] * [UnitPrice]", true);
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("OrderDetailID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("OrderDetails", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_OrderDetails_Quantity", "[Quantity] > 0");
-
-                            t.HasCheckConstraint("CK_OrderDetails_UnitPrice", "[UnitPrice] >= 0");
-                        });
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.OrderStatusHistory", b =>
-                {
-                    b.Property<long>("HistoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("HistoryID"));
-
-                    b.Property<DateTime>("ChangedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<int?>("ChangedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NewStatus")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("OldStatus")
-                        .HasMaxLength(30)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<long>("OrderID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("HistoryID");
-
-                    b.HasIndex("ChangedBy");
-
-                    b.HasIndex("OrderID");
-
-                    b.ToTable("OrderStatusHistory", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.PasswordResetToken", b =>
-                {
-                    b.Property<long>("PasswordResetTokenID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PasswordResetTokenID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime?>("UsedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("PasswordResetTokenID");
-
-                    b.HasIndex("Token")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_PasswordResetTokens_Token");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("PasswordResetTokens", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Product", b =>
-                {
-                    b.Property<int>("ProductID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
-
-                    b.Property<int>("BrandID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("SKU")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Specifications")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StockQuantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ProductID");
-
-                    b.HasIndex("BrandID");
-
-                    b.HasIndex("CategoryID");
-
-                    b.HasIndex("SKU")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Products_SKU");
-
-                    b.ToTable("Products", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Products_Price", "[Price] >= 0");
-
-                            t.HasCheckConstraint("CK_Products_Stock", "[StockQuantity] >= 0");
-                        });
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.ProductImage", b =>
-                {
-                    b.Property<int>("ImageID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<int>("DisplayOrder")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<bool>("IsPrimary")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImageID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("ProductImages", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.RefreshToken", b =>
-                {
-                    b.Property<long>("RefreshTokenID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RefreshTokenID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RevokedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("RefreshTokenID");
-
-                    b.HasIndex("Token")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_RefreshTokens_Token");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("RefreshTokens", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Role", b =>
-                {
-                    b.Property<int>("RoleID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("RoleID");
-
-                    b.HasIndex("RoleName")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Roles_RoleName");
-
-                    b.ToTable("Roles", (string)null);
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.User", b =>
-                {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
-
-                    b.Property<string>("AvatarURL")
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("RoleID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UserID");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_Users_Email");
-
-                    b.HasIndex("RoleID");
-
-                    b.ToTable("Users", (string)null);
-                });
-
             modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
                 {
                     b.Property<long>("MessageID")
@@ -1017,202 +258,763 @@ namespace ECommerce.Api.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Address", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Brand", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "User")
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Addresses_Users");
+                    b.Property<int>("BrandID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandID"));
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("LogoURL")
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BrandID");
+
+                    b.HasIndex("BrandName")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Brands_Name");
+
+                    b.ToTable("Brands", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Cart", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Category", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("ECommerce.Api.Entities.Cart", "UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Carts_Users");
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("ParentID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryID");
+
+                    b.HasIndex("CategoryName")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Categories_Name");
+
+                    b.HasIndex("ParentID");
+
+                    b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.CartItem", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Product", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Cart", "Cart")
-                        .WithMany("Items")
-                        .HasForeignKey("CartID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Property<int>("ProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
+
+                    b.Property<int>("BrandID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasConstraintName("FK_CartItems_Carts");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Property<string>("SKU")
                         .IsRequired()
-                        .HasConstraintName("FK_CartItems_Products");
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Navigation("Cart");
+                    b.Property<string>("Specifications")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("Product");
+                    b.Property<int>("StockQuantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ProductID");
+
+                    b.HasIndex("BrandID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("SKU")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Products_SKU");
+
+                    b.ToTable("Products", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Products_Price", "[Price] >= 0");
+
+                            t.HasCheckConstraint("CK_Products_Stock", "[StockQuantity] >= 0");
+                        });
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Category", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.ProductImage", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Category", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_Categories_Parent");
+                    b.Property<int>("ImageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Parent");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("ProductImages", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.InventoryTransaction", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.Address", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_Inventory_User");
+                    b.Property<int>("AddressID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
-                        .WithMany("InventoryTransactions")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullAddress")
                         .IsRequired()
-                        .HasConstraintName("FK_Inventory_Product");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Navigation("CreatedByUser");
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
-                    b.Navigation("Product");
+                    b.Property<string>("Province")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReceiverPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Ward")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("AddressID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Addresses", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Order", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.PasswordResetToken", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Orders_Users");
+                    b.Property<long>("PasswordResetTokenID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PasswordResetTokenID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("PasswordResetTokenID");
+
+                    b.HasIndex("Token")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_PasswordResetTokens_Token");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("PasswordResetTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.OrderDetail", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.RefreshToken", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Property<long>("RefreshTokenID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RefreshTokenID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
                         .IsRequired()
-                        .HasConstraintName("FK_OrderDetails_Orders");
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
 
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_OrderDetails_Products");
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
-                    b.Navigation("Order");
+                    b.HasKey("RefreshTokenID");
 
-                    b.Navigation("Product");
+                    b.HasIndex("Token")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_RefreshTokens_Token");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.OrderStatusHistory", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.Role", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "ChangedByUser")
-                        .WithMany()
-                        .HasForeignKey("ChangedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_OrderHistory_User");
+                    b.Property<int>("RoleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("ECommerce.Api.Entities.Order", "Order")
-                        .WithMany("StatusHistories")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("RoleName")
                         .IsRequired()
-                        .HasConstraintName("FK_OrderHistory_Orders");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Navigation("ChangedByUser");
+                    b.HasKey("RoleID");
 
-                    b.Navigation("Order");
+                    b.HasIndex("RoleName")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Roles_RoleName");
+
+                    b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.PasswordResetToken", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.User", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "User")
-                        .WithMany("PasswordResetTokens")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_PasswordResetTokens_Users");
+                    b.Property<int>("UserID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+
+                    b.Property<string>("AvatarURL")
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("RoleID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserID");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Users_Email");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Product", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Inventory.InventoryTransaction", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Brand", "Brand")
-                        .WithMany("Products")
-                        .HasForeignKey("BrandID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Property<long>("InventoryTransactionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("InventoryTransactionID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NewStock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PreviousStock")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ReferenceID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionType")
                         .IsRequired()
-                        .HasConstraintName("FK_Products_Brands");
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)");
 
-                    b.HasOne("ECommerce.Api.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Products_Categories");
+                    b.HasKey("InventoryTransactionID");
 
-                    b.Navigation("Brand");
+                    b.HasIndex("CreatedBy");
 
-                    b.Navigation("Category");
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("InventoryTransactions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Inventory_NewStock", "[NewStock] >= 0");
+
+                            t.HasCheckConstraint("CK_Inventory_Type", "[TransactionType] IN ('IMPORT','SALE','RETURN','ADJUSTMENT','CANCEL_ORDER')");
+                        });
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.ProductImage", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.Order", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_ProductImages_Products");
+                    b.Property<long>("OrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
-                    b.Navigation("Product");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderID"));
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ConfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)")
+                        .HasDefaultValue("PENDING");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)")
+                        .HasDefaultValue("COD");
+
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)")
+                        .HasDefaultValue("PENDING");
+
+                    b.Property<string>("Province")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReceiverPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("ShippingFee")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Ward")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("OrderID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Orders", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Orders_OrderStatus", "[OrderStatus] IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')");
+
+                            t.HasCheckConstraint("CK_Orders_PaymentMethod", "[PaymentMethod] = 'COD'");
+
+                            t.HasCheckConstraint("CK_Orders_PaymentStatus", "[PaymentStatus] IN ('PENDING','PAID','FAILED')");
+
+                            t.HasCheckConstraint("CK_Orders_ShippingFee", "[ShippingFee] >= 0");
+
+                            t.HasCheckConstraint("CK_Orders_SubTotal", "[SubTotal] >= 0");
+
+                            t.HasCheckConstraint("CK_Orders_TotalAmount", "[TotalAmount] >= 0");
+                        });
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.RefreshToken", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.OrderDetail", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_RefreshTokens_Users");
+                    b.Property<long>("OrderDetailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderDetailID"));
+
+                    b.Property<long>("OrderID")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("decimal(18,2)")
+                        .HasComputedColumnSql("[Quantity] * [UnitPrice]", true);
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderDetailID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("OrderDetails", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_OrderDetails_Quantity", "[Quantity] > 0");
+
+                            t.HasCheckConstraint("CK_OrderDetails_UnitPrice", "[UnitPrice] >= 0");
+                        });
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.User", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.OrderStatusHistory", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Users_Roles");
+                    b.Property<long>("HistoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
-                    b.Navigation("Role");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("HistoryID"));
+
+                    b.Property<DateTime>("ChangedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int?>("ChangedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NewStatus")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("OldStatus")
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<long>("OrderID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("HistoryID");
+
+                    b.HasIndex("ChangedBy");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("OrderStatusHistory", (string)null);
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.ShoppingCart.Cart", b =>
+                {
+                    b.Property<int>("CartID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_Carts_User");
+
+                    b.ToTable("Carts", (string)null);
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.ShoppingCart.CartItem", b =>
+                {
+                    b.Property<long>("CartItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CartItemID"));
+
+                    b.Property<DateTime>("AddedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int>("CartID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CartItemID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("CartID", "ProductID")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_CartItems_Cart_Product");
+
+                    b.ToTable("CartItems", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CartItems_Quantity", "[Quantity] > 0");
+                        });
                 });
 
             modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
@@ -1229,7 +1031,7 @@ namespace ECommerce.Api.Migrations
 
             modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.User", null)
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1238,7 +1040,7 @@ namespace ECommerce.Api.Migrations
 
             modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiIndexJob", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1250,7 +1052,7 @@ namespace ECommerce.Api.Migrations
 
             modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiKnowledgeChunk", b =>
                 {
-                    b.HasOne("ECommerce.Api.Entities.Product", "Product")
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1275,7 +1077,7 @@ namespace ECommerce.Api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_AIMessageSources_Messages");
 
-                    b.HasOne("ECommerce.Api.Entities.Product", null)
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1287,31 +1089,227 @@ namespace ECommerce.Api.Migrations
                     b.Navigation("Message");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Brand", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Category", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_Categories_Parent");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Product", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Products_Brands");
+
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Products_Categories");
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.ProductImage", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_ProductImages_Products");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.Address", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Addresses_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.PasswordResetToken", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "User")
+                        .WithMany("PasswordResetTokens")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_PasswordResetTokens_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.RefreshToken", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_RefreshTokens_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.User", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Users_Roles");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Inventory.InventoryTransaction", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_Inventory_User");
+
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
+                        .WithMany("InventoryTransactions")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Inventory_Product");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.Order", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Orders_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.OrderDetail", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Orders.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderDetails_Orders");
+
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderDetails_Products");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.OrderStatusHistory", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "ChangedByUser")
+                        .WithMany()
+                        .HasForeignKey("ChangedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_OrderHistory_User");
+
+                    b.HasOne("ECommerce.Api.Modules.Orders.Order", "Order")
+                        .WithMany("StatusHistories")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderHistory_Orders");
+
+                    b.Navigation("ChangedByUser");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.ShoppingCart.Cart", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.Identity.User", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("ECommerce.Api.Modules.ShoppingCart.Cart", "UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Carts_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.ShoppingCart.CartItem", b =>
+                {
+                    b.HasOne("ECommerce.Api.Modules.ShoppingCart.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_CartItems_Carts");
+
+                    b.HasOne("ECommerce.Api.Modules.Catalog.Product", "Product")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_CartItems_Products");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
+                {
+                    b.Navigation("Sources");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Brand", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Cart", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Category", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Category", b =>
                 {
                     b.Navigation("Children");
 
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-
-                    b.Navigation("StatusHistories");
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Entities.Product", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Catalog.Product", b =>
                 {
                     b.Navigation("CartItems");
 
@@ -1322,12 +1320,12 @@ namespace ECommerce.Api.Migrations
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.Role", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.Role", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Entities.User", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Identity.User", b =>
                 {
                     b.Navigation("Addresses");
 
@@ -1340,14 +1338,16 @@ namespace ECommerce.Api.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatMessage", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.Orders.Order", b =>
                 {
-                    b.Navigation("Sources");
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("StatusHistories");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Modules.AI.Entities.AiChatSession", b =>
+            modelBuilder.Entity("ECommerce.Api.Modules.ShoppingCart.Cart", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

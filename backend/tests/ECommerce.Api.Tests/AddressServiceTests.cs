@@ -1,10 +1,8 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.DTOs.Addresses;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Addresses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

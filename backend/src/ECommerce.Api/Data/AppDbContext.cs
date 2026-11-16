@@ -1,7 +1,11 @@
-using ECommerce.Api.Entities;
 using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Modules.Inventory;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Modules.ShoppingCart;
 
 namespace ECommerce.Api.Data;
 

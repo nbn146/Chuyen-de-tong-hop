@@ -1,8 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs.Admin;
-using ECommerce.Api.Services.Admin;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.Admin;
 
 namespace ECommerce.Api.Tests;
 

@@ -1,6 +1,6 @@
 using System.Net;
-using ECommerce.Api.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Tests;
 

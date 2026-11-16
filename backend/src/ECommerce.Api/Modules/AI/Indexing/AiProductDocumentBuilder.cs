@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
-using ECommerce.Api.Entities;
+using ECommerce.Api.Modules.Catalog;
 
 namespace ECommerce.Api.Modules.AI.Indexing;
 

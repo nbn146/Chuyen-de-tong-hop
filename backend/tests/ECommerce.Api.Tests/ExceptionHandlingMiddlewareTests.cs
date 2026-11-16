@@ -1,9 +1,9 @@
 using System.Net;
 using System.Text.Json;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Middleware;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
+using ECommerce.Api.Shared.Exceptions;
+using ECommerce.Api.Shared.Middleware;
 
 namespace ECommerce.Api.Tests;
 

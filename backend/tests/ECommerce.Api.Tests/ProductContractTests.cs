@@ -1,5 +1,5 @@
 using System.Text.Json;
-using ECommerce.Api.DTOs.Products;
+using ECommerce.Api.Modules.Catalog;
 
 namespace ECommerce.Api.Tests;
 

@@ -1,11 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs.Auth;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ECommerce.Api.Modules.Identity;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 
@@ -15,7 +14,7 @@ public sealed class AuthControllerTests
     public async Task RegisterReturnsCreatedWhenServiceReturnsAuthenticationResponse()
     {
         var response = AuthResponse();
-        var controller = new Controllers.AuthController(new StubAuthService(registerResult: response));
+        var controller = new AuthController(new StubAuthService(registerResult: response));
 
         var result = await controller.Register(
             new RegisterDto

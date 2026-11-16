@@ -2,6 +2,7 @@ using ECommerce.Api.Modules.AI.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Modules.AI.Chat;
 

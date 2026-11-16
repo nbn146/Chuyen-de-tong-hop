@@ -1,6 +1,6 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.Entities;
 using ECommerce.Api.Modules.AI.Entities;
+using ECommerce.Api.Modules.Catalog;
 
 namespace ECommerce.Api.Modules.AI.Indexing;
 

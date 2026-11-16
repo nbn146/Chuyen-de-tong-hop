@@ -8,6 +8,8 @@ using ECommerce.Api.Modules.AI.VectorStore;
 using Microsoft.Extensions.AI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Modules.AI.Chat;
 

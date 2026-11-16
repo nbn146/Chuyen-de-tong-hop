@@ -1,6 +1,6 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

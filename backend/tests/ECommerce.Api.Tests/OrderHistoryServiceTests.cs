@@ -1,8 +1,7 @@
 using ECommerce.Api.Data;
-using ECommerce.Api.Entities;
-using ECommerce.Api.Exceptions;
-using ECommerce.Api.Services.Orders;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 

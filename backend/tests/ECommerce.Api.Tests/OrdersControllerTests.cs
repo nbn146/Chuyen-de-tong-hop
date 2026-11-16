@@ -1,9 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs;
-using ECommerce.Api.DTOs.Orders;
-using ECommerce.Api.Services.Orders;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.Orders;
+using ECommerce.Api.Shared;
 
 namespace ECommerce.Api.Tests;
 

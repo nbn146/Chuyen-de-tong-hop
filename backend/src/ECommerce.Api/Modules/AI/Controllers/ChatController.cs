@@ -1,8 +1,9 @@
+using ECommerce.Api.Shared.Extensions;
 using ECommerce.Api.Modules.AI.Chat;
 using ECommerce.Api.Modules.AI.Contracts;
-using ECommerce.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Modules.AI.Controllers;
 

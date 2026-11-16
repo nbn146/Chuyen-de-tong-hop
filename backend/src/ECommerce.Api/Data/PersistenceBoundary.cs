@@ -1,5 +1,5 @@
-using ECommerce.Api.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Data;
 

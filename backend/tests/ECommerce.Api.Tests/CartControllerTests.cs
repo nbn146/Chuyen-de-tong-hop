@@ -1,8 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs.Cart;
-using ECommerce.Api.Services.Cart;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.ShoppingCart;
 
 namespace ECommerce.Api.Tests;
 

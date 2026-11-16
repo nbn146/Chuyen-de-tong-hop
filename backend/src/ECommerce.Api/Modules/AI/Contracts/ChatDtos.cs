@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Modules.AI.Contracts;
 

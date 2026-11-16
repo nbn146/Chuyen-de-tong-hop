@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs.Categories;
-using ECommerce.Api.Services.Categories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ECommerce.Api.Modules.Catalog;
+using ECommerce.Api.Shared.Exceptions;
 
 namespace ECommerce.Api.Tests;
 
@@ -40,7 +40,7 @@ public sealed class CategoriesControllerTests
     public async Task AdminDeleteMissingCategoryReturnsNotFoundProblem()
     {
         using var factory = CreateFactory((_, _) =>
-            Task.FromException(new ECommerce.Api.Exceptions.ResourceNotFoundException()));
+            Task.FromException(new ECommerce.Api.Shared.Exceptions.ResourceNotFoundException()));
         using var client = factory.CreateClientWithRole("Admin");
 
         using var response = await client.DeleteAsync("/api/categories/404");
@@ -53,7 +53,7 @@ public sealed class CategoriesControllerTests
     public async Task AdminDeleteCategoryWithDependenciesReturnsConflictProblem()
     {
         using var factory = CreateFactory((_, _) =>
-            Task.FromException(new ECommerce.Api.Exceptions.DomainConflictException()));
+            Task.FromException(new ECommerce.Api.Shared.Exceptions.DomainConflictException()));
         using var client = factory.CreateClientWithRole("Admin");
 
         using var response = await client.DeleteAsync("/api/categories/1");

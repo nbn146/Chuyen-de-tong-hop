@@ -1,8 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using ECommerce.Api.DTOs.Profile;
-using ECommerce.Api.Services.Profile;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Api.Modules.Identity;
 
 namespace ECommerce.Api.Tests;
 
