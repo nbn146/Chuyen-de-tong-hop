@@ -182,6 +182,7 @@ Bạn chỉ cần mở file trong VS Code hoặc Visual Studio và nhấn **Send
 
 ## 📚 7. Tài liệu Kiến trúc & Sơ đồ Thiết kế
 
+- 📑 **[Khảo Sát Thị Trường & Phân Tích Nghiệp Vụ Toàn Diện](docs/KHAO_SAT_THI_TRUONG_VA_PHAN_TICH_NGHIEP_VU.md)**
 - 📖 **[Tài liệu Tổng Hợp Toàn Diện & Ôn Thi Vấn Đáp Đồ Án](docs/TOM_TAT_DU_AN_VA_BACKEND.md)**
 - 📊 **[Báo cáo Phân Công Công Việc Chi Tiết](docs/PHAN_CONG_CONG_VIEC.md)**
 - 📈 **[Báo Cáo Nghiệm Thu Công Việc Backend Đào Đăng Quang](docs/tien-do/BE_DANG_QUANG.md)**
