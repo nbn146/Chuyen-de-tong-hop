@@ -1,6 +1,304 @@
-@ECommerce.Api_HostAddress = http://localhost:5296
+@baseUrl = http://localhost:5296
+@customerEmail = customer@example.test
+@customerPassword = Customer@123456
+@adminEmail = admin@example.test
+@adminPassword = Admin@123456
 
-GET {{ECommerce.Api_HostAddress}}/api/health
+### ==============================================================================
+### 1. HEALTH & SYSTEM DIAGNOSTICS
+### ==============================================================================
+
+### Health Check (Kiểm tra trạng thái hệ thống)
+GET {{baseUrl}}/api/health
 Accept: application/json
 
-###
+### ==============================================================================
+### 2. AUTHENTICATION (XÁC THỰC & CẤP TOKEN)
+### ==============================================================================
+
+### Đăng ký tài khoản khách hàng mới
+# @name registerCustomer
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "quang.test@example.com",
+  "password": "Password@123456",
+  "fullName": "Đào Đăng Quang Test",
+  "phone": "0987654321"
+}
+
+### Đăng nhập tài khoản Customer (Lưu Token để dùng cho các request tiếp theo)
+# @name customerLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{customerEmail}}",
+  "password": "{{customerPassword}}"
+}
+
+### Gán token Customer vào biến
+@customerToken = {{customerLogin.response.body.token}}
+
+### Đăng nhập tài khoản Administrator
+# @name adminLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Gán token Admin vào biến
+@adminToken = {{adminLogin.response.body.token}}
+
+### ==============================================================================
+### 3. CATALOG & SẢN PHẨM (PUBLIC APIs)
+### ==============================================================================
+
+### Lấy danh sách sản phẩm (Phân trang, lọc theo giá, danh mục, tìm kiếm)
+GET {{baseUrl}}/api/products?page=1&pageSize=10&search=&minPrice=0&maxPrice=100000000&sortBy=price_asc
+Accept: application/json
+
+### Tìm kiếm sản phẩm theo từ khóa (Laptop)
+GET {{baseUrl}}/api/products?search=Laptop&page=1&pageSize=5
+Accept: application/json
+
+### Lấy chi tiết sản phẩm theo ID
+GET {{baseUrl}}/api/products/1
+Accept: application/json
+
+### Lấy danh mục sản phẩm
+GET {{baseUrl}}/api/categories
+Accept: application/json
+
+### Lấy chi tiết một danh mục
+GET {{baseUrl}}/api/categories/1
+Accept: application/json
+
+### ==============================================================================
+### 4. HỒ SƠ & SỔ ĐỊA CHỈ KHÁCH HÀNG (CUSTOMER PROFILE & ADDRESSES)
+### ==============================================================================
+
+### Xem thông tin cá nhân
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### Cập nhật thông tin cá nhân
+PUT {{baseUrl}}/api/profile
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "fullName": "Đào Đăng Quang",
+  "phone": "0912345678"
+}
+
+### Lấy danh sách địa chỉ nhận hàng
+GET {{baseUrl}}/api/addresses
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### Thêm địa chỉ nhận hàng mới
+# @name createAddress
+POST {{baseUrl}}/api/addresses
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "receiverName": "Đào Đăng Quang",
+  "receiverPhone": "0912345678",
+  "province": "Hà Nội",
+  "district": "Cầu Giấy",
+  "ward": "Dịch Vọng Hậu",
+  "fullAddress": "Số 1 Xuân Thủy, Cầu Giấy, Hà Nội",
+  "isDefault": true
+}
+
+### ==============================================================================
+### 5. GIỎ HÀNG TRỰC TUYẾN (SERVER-BACKED CART)
+### ==============================================================================
+
+### Xem giỏ hàng hiện tại
+GET {{baseUrl}}/api/cart
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### Thêm sản phẩm vào giỏ hàng
+POST {{baseUrl}}/api/cart/items
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2
+}
+
+### Cập nhật số lượng của một item trong giỏ (Thay cartItemId bằng ID thực tế)
+PUT {{baseUrl}}/api/cart/items/1
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Xóa một item khỏi giỏ hàng
+DELETE {{baseUrl}}/api/cart/items/1
+Authorization: Bearer {{customerToken}}
+
+### ==============================================================================
+### 6. ĐẶT HÀNG & QUẢN LÝ ĐƠN HÀNG (ORDERS & CHECKOUT)
+### ==============================================================================
+
+### Đặt hàng thanh toán COD (Trừ tồn kho, lưu Snapshot giá và địa chỉ)
+POST {{baseUrl}}/api/orders/checkout
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "addressId": 1,
+  "paymentMethod": "COD",
+  "note": "Giao hàng vào giờ hành chính"
+}
+
+### Đặt hàng thanh toán chuyển khoản Mock QR
+POST {{baseUrl}}/api/orders/checkout
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "addressId": 1,
+  "paymentMethod": "QR",
+  "note": "Thanh toán QR Code thử nghiệm"
+}
+
+### Xem lịch sử đơn hàng của khách hàng
+GET {{baseUrl}}/api/orders
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### Xem chi tiết đơn hàng theo ID
+GET {{baseUrl}}/api/orders/1
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### Khách hàng hủy đơn hàng (Chỉ cho phép khi đơn ở trạng thái PENDING, tự động hoàn kho)
+POST {{baseUrl}}/api/orders/1/cancel
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+### ==============================================================================
+### 7. QUẢN TRỊ ADMIN PORTAL
+### ==============================================================================
+
+### Thêm sản phẩm mới (Yêu cầu quyền Admin)
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "brandId": 1,
+  "productName": "Laptop Gaming ElectroTech Pro 2026",
+  "sku": "LAP-ET-2026-PRO",
+  "description": "Cấu hình khủng Core i9 thế hệ mới, RAM 32GB, SSD 1TB, RTX 4080",
+  "price": 38990000,
+  "stockQuantity": 20,
+  "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302"
+}
+
+### Thêm danh mục mới (Admin)
+POST {{baseUrl}}/api/categories
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "categoryName": "Linh kiện & Phụ kiện cao cấp",
+  "description": "Các loại bàn phím cơ, chuột không dây và tai nghe gaming",
+  "parentCategoryId": null
+}
+
+### Xem danh sách người dùng trong hệ thống (Admin)
+GET {{baseUrl}}/api/admin/users?pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Xem danh sách tất cả đơn hàng (Admin)
+GET {{baseUrl}}/api/admin/orders?pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Xem chi tiết đơn hàng (Admin)
+GET {{baseUrl}}/api/admin/orders/1
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Cập nhật trạng thái đơn hàng (Admin: PENDING -> CONFIRMED -> SHIPPING -> COMPLETED)
+PUT {{baseUrl}}/api/admin/orders/1/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "newStatus": "CONFIRMED",
+  "note": "Admin đã xác nhận đơn hàng và chuẩn bị xuất kho"
+}
+
+### ==============================================================================
+### 8. QUẢN LÝ TỒN KHO THỜI GIAN THỰC (INVENTORY MANAGEMENT)
+### ==============================================================================
+
+### Xem danh sách tồn kho theo từ khóa
+GET {{baseUrl}}/api/inventory?keyword=Laptop
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Cập nhật số lượng tồn kho (Nhập hàng thêm: Import / Điều chỉnh: Adjustment)
+PUT {{baseUrl}}/api/inventory/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "quantity": 10,
+  "transactionType": "Import",
+  "note": "Nhập kho đợt hàng mới từ nhà cung cấp"
+}
+
+### Xem lịch sử giao dịch kho của một sản phẩm
+GET {{baseUrl}}/api/inventory/1/transactions
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### ==============================================================================
+### 9. BÁO CÁO THỐNG KÊ DOANH THU & DASHBOARD (REPORTS)
+### ==============================================================================
+
+### Báo cáo tổng quan Dashboard (Tổng doanh thu, số đơn, người dùng)
+GET {{baseUrl}}/api/reports/summary
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Báo cáo doanh thu theo khoảng thời gian
+GET {{baseUrl}}/api/reports/revenue?from=2026-01-01&to=2026-12-31
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Top sản phẩm bán chạy nhất
+GET {{baseUrl}}/api/reports/top-products?count=5
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### ==============================================================================
+### 10. AI ASSISTANT (TƯ VẤN SẢN PHẨM GOOGLE GEMINI)
+### ==============================================================================
+
+### Chat với Trợ lý AI tư vấn công nghệ
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "Tôi cần tư vấn một chiếc laptop tầm giá 20 triệu để học lập trình và chơi game nhẹ"
+}
