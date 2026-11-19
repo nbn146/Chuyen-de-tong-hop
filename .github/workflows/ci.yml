@@ -5,9 +5,11 @@ on:
     branches:
       - main
       - develop
+      - Dquang_backend
   push:
     branches:
       - develop
+      - Dquang_backend
 
 permissions:
   contents: read
@@ -40,6 +42,7 @@ jobs:
     name: frontend
     runs-on: windows-latest
     timeout-minutes: 15
+    if: hashFiles('frontend/package.json') != ''
 
     defaults:
       run:
@@ -66,4 +69,3 @@ jobs:
 
       - name: Build frontend
         run: npm run build
-
